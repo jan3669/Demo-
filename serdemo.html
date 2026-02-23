@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Services - TOP THEN CRAFT</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins', sans-serif;
+}
+
+body{
+    background:#f4f6fb;
+    color:#1f2937;
+}
+
+/* SECTION */
+.services-section{
+    width:90%;
+    max-width:1200px;
+    margin:80px auto;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:50px;
+}
+
+.section-title h2{
+    font-size:36px;
+    font-weight:700;
+}
+
+.section-title p{
+    margin-top:10px;
+    color:#6b7280;
+}
+
+/* GRID */
+.services-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:25px;
+}
+
+/* CARD */
+.service-card{
+    background:#ffffff;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.05);
+    cursor:pointer;
+    transition:0.3s ease;
+    text-align:center;
+}
+
+.service-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 30px rgba(0,0,0,0.08);
+}
+
+.service-card h3{
+    margin-top:15px;
+    font-weight:600;
+    color:#2563eb;
+}
+
+/* DETAIL PANEL */
+.service-detail{
+    margin-top:60px;
+    background:#ffffff;
+    padding:50px;
+    border-radius:25px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.08);
+    opacity:1;
+    transition:0.3s ease;
+}
+
+.service-detail.fade{
+    opacity:0;
+}
+
+.service-detail h2{
+    margin-bottom:15px;
+    color:#2563eb;
+}
+
+.service-detail p{
+    color:#4b5563;
+}
+
+.service-detail ul{
+    margin-top:20px;
+    padding-left:20px;
+}
+
+.service-detail li{
+    margin-bottom:10px;
+    color:#374151;
+}
+
+/* CTA */
+.cta-btn{
+    display:inline-block;
+    margin-top:25px;
+    padding:12px 28px;
+    border-radius:50px;
+    background:linear-gradient(90deg,#2563eb,#3b82f6);
+    color:#fff;
+    text-decoration:none;
+    font-weight:500;
+    transition:0.3s;
+}
+
+.cta-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 20px rgba(37,99,235,0.3);
+}
+
+</style>
+</head>
+<body>
+
+<section class="services-section">
+
+    <div class="section-title">
+        <h2>Our Digital Marketing Services</h2>
+        <p>Click any service to explore full details</p>
+    </div>
+
+    <div class="services-grid">
+        <div class="service-card" onclick="showService('seo')">
+            <h3>SEO</h3>
+        </div>
+        <div class="service-card" onclick="showService('smm')">
+            <h3>Social Media Marketing</h3>
+        </div>
+        <div class="service-card" onclick="showService('ads')">
+            <h3>Paid Advertising</h3>
+        </div>
+        <div class="service-card" onclick="showService('content')">
+            <h3>Content Marketing</h3>
+        </div>
+    </div>
+
+    <div class="service-detail" id="serviceDetail">
+        <h2>Search Engine Optimization (SEO)</h2>
+        <p>We help your website rank on Google’s first page using structured optimization strategies.</p>
+        <ul>
+            <li>Keyword Research</li>
+            <li>On-page Optimization</li>
+            <li>Technical SEO</li>
+            <li>Backlink Building</li>
+            <li>Performance Reporting</li>
+        </ul>
+        <a href="#" class="cta-btn">Get Started</a>
+    </div>
+
+</section>
+
+<script>
+const services = {
+    seo:{
+        title:"Search Engine Optimization (SEO)",
+        desc:"We help your website rank on Google’s first page using structured optimization strategies.",
+        points:["Keyword Research","On-page Optimization","Technical SEO","Backlink Building","Performance Reporting"]
+    },
+    smm:{
+        title:"Social Media Marketing",
+        desc:"Strategic social media growth focused on engagement and brand visibility.",
+        points:["Instagram & Facebook Management","Reels Strategy","Content Planning","Audience Growth"]
+    },
+    ads:{
+        title:"Paid Advertising",
+        desc:"ROI-driven ad campaigns to generate leads and sales.",
+        points:["Facebook & Instagram Ads","Google Search Ads","YouTube Ads","Conversion Tracking"]
+    },
+    content:{
+        title:"Content Marketing",
+        desc:"Creative content strategies to build authority and trust.",
+        points:["Blog Writing","Video Scripts","Brand Storytelling","Creative Campaigns"]
+    }
+};
+
+function showService(key){
+    const detail=document.getElementById("serviceDetail");
+    const data=services[key];
+
+    detail.classList.add("fade");
+
+    setTimeout(()=>{
+        detail.innerHTML=`
+            <h2>${data.title}</h2>
+            <p>${data.desc}</p>
+            <ul>${data.points.map(p=>`<li>${p}</li>`).join("")}</ul>
+            <a href="#" class="cta-btn">Get Started</a>
+        `;
+        detail.classList.remove("fade");
+    },200);
+}
+</script>
+
+</body>
+</html>
