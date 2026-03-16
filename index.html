@@ -950,33 +950,11 @@
                     <h3><i class="fas fa-handshake"></i> Creative minds, measurable impact</h3>
                     <p>We're a lean team of strategists, designers and digital experts. we are here to make your brand to the top with our craft. We believe in transparent partnerships
                         and simple, powerful ideas.</p>
-                    <!-- <div class="stats">
-                        <div class="stat-item"><span class="stat-number">6+</span> years</div>
-                        <div class="stat-item"><span class="stat-number">200+</span> projects</div>
-                        <div class="stat-item"><span class="stat-number">98%</span> retention</div>
-                    </div> -->
+                   
                 </div>
             </div>
         </section>
-        <!-- <section id="feedback">
-            <div class="feedback-section">
-  <h2>Customer Feedback</h2> -->
-
-  <!-- Feedback Form
-  <form id="feedbackForm" class="feedback-form">
-    <input type="text" id="name" placeholder="Your Name" required>
-    <textarea id="message" placeholder="Your Feedback" required></textarea>
-    <select id="rating" required>
-      <option value="">Rating</option>
-      <option value="★★★★★">★★★★★</option>
-      <option value="★★★★☆">★★★★☆</option>
-      <option value="★★★☆☆">★★★☆☆</option>
-    </select>
-    <button type="submit">Submit Feedback</button>
-  </form>
-
-  <div id="reviews"></div>
-</div> -->
+       
 
 
         </section>
@@ -1000,13 +978,22 @@
                     </div>
                 </div>
                 <div class="contact-form">
-                    <form action="#" method="post">
-                        <div class="form-group"><input type="text" placeholder="Your name" required></div>
-                        <div class="form-group"><input type="email" placeholder="Email address" required></div>
-                        <div class="form-group"><textarea placeholder="Tell us about your project..."></textarea></div>
-                        <button type="submit"><i class="fas fa-paper-plane" style="margin-right: 8px;"></i> Send
-                            message</button>
+                    <form id="contact-form" action="https://formspree.io/f/xykneedj" method="post">
+                        <div class="form-group">
+                            <input name="name" type="text" placeholder="Your name" required>
+                        </div>
+                        <div class="form-group">
+                            <input name="email" type="email" placeholder="Email address" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="message" placeholder="Tell us about your project..." required></textarea>
+                        </div>
+                        <button type="submit" id="submit-btn">
+                            <span id="btn-spinner" style="display:none; margin-right:8px;"><i class="fas fa-circle-notch fa-spin"></i></span>
+                            <span id="btn-text">Send message</span>
+                        </button>
                     </form>
+                    <div id="success-message" style="display:none; margin-top:16px; color:#0f5132; background:#d1e7dd; padding:12px; border-radius:8px;">Thanks — your message has been sent.</div>
                 </div>
             </div>
         </section>
@@ -1042,25 +1029,72 @@
         </div>
     </footer>
 </body>
-<script>
-document.getElementById("feedbackForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const name = document.getElementById("name").value;
-  const message = document.getElementById("message").value;
-  const rating = document.getElementById("rating").value;
-
-  const reviewBox = `
-    <div class="review-card">
-      <h4>${name}</h4>
-      <div class="stars">${rating}</div>
-      <p>${message}</p>
-    </div>
-  `;
-
-  document.getElementById("reviews").innerHTML += reviewBox;
-
-  // Clear form
-  this.reset();
-});
 </script>
+<script>
+// Feedback form handler (guarded)
+const feedbackForm = document.getElementById("feedbackForm");
+if (feedbackForm) {
+    feedbackForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const name = document.getElementById("name")?.value || 'Anonymous';
+        const message = document.getElementById("message")?.value || '';
+        const rating = document.getElementById("rating")?.value || '';
+        const reviewBox = `
+            <div class="review-card">
+                <h4>${name}</h4>
+                <div class="stars">${rating}</div>
+                <p>${message}</p>
+            </div>
+        `;
+        const reviews = document.getElementById("reviews");
+        if (reviews) reviews.innerHTML += reviewBox;
+        this.reset();
+    });
+}
+
+// Contact form handler (guarded)
+const form = document.getElementById('contact-form');
+if (form) {
+    const successMsg = document.getElementById('success-message');
+    const btnSpinner = document.getElementById('btn-spinner');
+    const btnText = document.getElementById('btn-text');
+    const submitBtn = document.getElementById('submit-btn');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (btnSpinner) btnSpinner.style.display = 'inline-block';
+        if (btnText) btnText.textContent = 'Sending...';
+        if (submitBtn) submitBtn.disabled = true;
+
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (response.ok) {
+                form.style.display = 'none';
+                if (successMsg) successMsg.style.display = 'block';
+            } else {
+                const data = await response.json().catch(() => ({}));
+                alert(data?.errors ? data.errors.map(err => err.message).join(", ") : "Submission failed.");
+                resetButton();
+            }
+        } catch (error) {
+            alert("Oops! There was a problem. Please try again.");
+            resetButton();
+        }
+    });
+
+    function resetButton() {
+        if (btnSpinner) btnSpinner.style.display = 'none';
+        if (btnText) btnText.textContent = 'Send message';
+        if (submitBtn) submitBtn.disabled = false;
+    }
+}
+</script>
+</html>
+
